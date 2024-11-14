@@ -20,3 +20,17 @@ if not script.active_mods['pylandblock'] then
         end
     end)
 end
+
+script.on_event(defines.events.on_player_created, function(event)
+	local player = game.players[event.player_index]
+    if not player.valid then return end
+    local nauvis = game.surfaces["nauvis"]
+    if not nauvis then return end
+
+    local mapgen = nauvis.map_gen_settings
+    if mapgen.property_expression_names.elevation ~= "elevation_island" or
+        (mapgen.autoplace_controls["raw-coal"] and mapgen.autoplace_controls["raw-coal"].size ~= 0)
+    then
+        player.print {"messages.pyblock-warning-no-preset"}
+    end
+end)
